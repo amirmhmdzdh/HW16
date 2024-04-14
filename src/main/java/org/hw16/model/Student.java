@@ -57,4 +57,62 @@ public class Student extends Person {
         this.gpa = gpa;
         this.studentState = studentState;
     }
+
+    public Department getStudentDepartment() {
+        return studentDepartment;
+    }
+
+    public void setStudentDepartment(Department studentDepartment) {
+        this.studentDepartment = studentDepartment;
+    }
+
+    public List<StudentTakenCourse> getStudentTakenCourseList() {
+        return studentTakenCourseList;
+    }
+
+    public void setStudentTakenCourseList(List<StudentTakenCourse> studentTakenCourseList) {
+        this.studentTakenCourseList = studentTakenCourseList;
+    }
+
+    public void setTotalCredit() {
+        for (StudentTakenCourse takenCourse : studentTakenCourseList) {
+            this.totalCredit += takenCourse.getReleasedCourse().getCourse().getCredit();
+        }
+    }
+
+    public Integer getTotalCredit() {
+        return totalCredit;
+    }
+
+    public void setGpa() {
+        int number = 0;
+        for (StudentTakenCourse takenCourse : studentTakenCourseList) {
+            this.gpa += takenCourse.getMark() * takenCourse.getReleasedCourse().getCourse().getCredit();
+            number++;
+        }
+        this.gpa /= totalCredit;
+    }
+
+    public Double getGpa() {
+        return gpa;
+    }
+
+    public StudentState getStudentState() {
+        return studentState;
+    }
+
+    public void setStudentState(StudentState studentState) {
+        this.studentState = studentState;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentDepartment=" + studentDepartment +
+                ", studentTakenCourseList=" + studentTakenCourseList +
+                ", totalCredit=" + totalCredit +
+                ", gpa=" + gpa +
+                ", studentState=" + studentState +
+                "} " + super.toString();
+    }
 }
