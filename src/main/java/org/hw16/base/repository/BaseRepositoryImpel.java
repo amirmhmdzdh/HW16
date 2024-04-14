@@ -50,6 +50,26 @@ public abstract class BaseRepositoryImpel<T extends BaseEntity<ID>, ID extends S
     public List<T> findAll() {
         Session session = sessionFactory.getCurrentSession();
         Query<T> query = session.createQuery(String.format("from %s", getEntity()), getEntityClass());
-        return query.getResultList();    }
+        return query.getResultList();
+    }
+
     public abstract String getEntity();
+
+    @Override
+    public long getCount() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("SELECT COUNT( 'count' ) FROM " + getEntityClass().getSimpleName() + "count", Long.class).getSingleResult();
+    }
+
+    @Override
+    public boolean contain(T entity) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.contains(entity);
+    }
+
+    @Override
+    public boolean contain(ID id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.contains(id);
+    }
 }
