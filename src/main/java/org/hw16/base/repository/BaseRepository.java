@@ -16,11 +16,5 @@ public interface BaseRepository<T extends BaseEntity<ID>, ID extends Serializabl
 
     List<T> findAll();
 
-    long getCount();
-
-    boolean contain(T entity);
-
-    boolean contain(ID id);
-
-
+    List<T> showAll();
 }
