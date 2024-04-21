@@ -13,14 +13,20 @@ import javax.validation.constraints.Min;
 @DiscriminatorValue("Employee")
 public class Employee extends Person {
 
-    @Min(10_000_000)
+    @Min(1_000_000)
     private Long salary;
 
 
     public Employee() {
     }
 
-    public Employee(Long salary) {
+    public Employee(String firstname, String lastname, String nationalCode, String password, String email, Long salary) {
+        super(firstname, lastname, nationalCode, password, email);
+        this.salary = salary;
+    }
+
+    public Employee(Long aLong, String firstname, String lastname, String nationalCode, String password, String email, Long salary) {
+        super(aLong, firstname, lastname, nationalCode, password, email);
         this.salary = salary;
     }
 
