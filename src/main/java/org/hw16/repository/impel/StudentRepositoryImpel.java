@@ -8,8 +8,6 @@ import org.hw16.base.repository.BaseRepositoryImpel;
 import org.hw16.model.Student;
 import org.hw16.repository.StudentRepository;
 
-import java.util.List;
-
 public class StudentRepositoryImpel extends BaseRepositoryImpel<Student, Long>
         implements StudentRepository {
 
