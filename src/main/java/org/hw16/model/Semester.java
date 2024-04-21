@@ -1,25 +1,39 @@
 package org.hw16.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.PrePersist;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hw16.base.entity.BaseEntity;
-import org.hw16.model.enums.Season;
 
-import java.time.Year;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
 @Entity
+@ToString
+@NoArgsConstructor
 public class Semester extends BaseEntity<Long> {
 
-    private Season season;
+    @Size(max = 4, min = 4, message = "Enter a valid academic semester.")
+    @NotNull(message = "Please Enter Semester.")
+    private Integer season;
 
+    @Size(max = 4, min = 4, message = "Enter a valid academic Year.")
+    @NotNull(message = "Please Enter Year.")
     private Integer year;
 
-    @PrePersist
-    private void prePersist() {
-        year = Year.now().getValue();
+
+    public Semester(Long aLong, Integer season, Integer year) {
+        super(aLong);
+        this.season = season;
+        this.year = year;
+    }
+
+    public Semester(Integer season, Integer year) {
+        this.season = season;
+        this.year = year;
     }
 }
