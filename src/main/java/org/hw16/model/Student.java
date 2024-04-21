@@ -3,8 +3,10 @@ package org.hw16.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.hw16.model.enums.StudentState;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Getter
@@ -13,57 +15,44 @@ import java.util.List;
 @DiscriminatorValue("Student")
 public class Student extends Person {
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "student_department_id")
-    private Department studentDepartment;
-
     @OneToMany(mappedBy = "student",
             fetch = FetchType.EAGER)
     private List<StudentTakenCourse> studentTakenCourseList;
 
     @Column(name = "total_credits")
+    @Min(value = 0, message = "Invalid input for unit. It should be positive number.")
     private Integer totalCredit;
 
     private Double gpa;
 
     @Column(name = "student_state")
+    @NotEmpty(message = "Please Enter your major correctly.")
     private StudentState studentState;
 
     public Student() {
     }
 
-    public Student(Department studentDepartment, List<StudentTakenCourse> studentTakenCourseList, Integer totalCredit, Double gpa, StudentState studentState) {
-        this.studentDepartment = studentDepartment;
+    public Student(List<StudentTakenCourse> studentTakenCourseList, Integer totalCredit, Double gpa, StudentState studentState) {
         this.studentTakenCourseList = studentTakenCourseList;
         this.totalCredit = totalCredit;
         this.gpa = gpa;
         this.studentState = studentState;
     }
 
-    public Student(Long aLong, String firstname, String lastname, String nationalCode, String password, String email, Department studentDepartment, List<StudentTakenCourse> studentTakenCourseList, Integer totalCredit, Double gpa, StudentState studentState) {
+    public Student(Long aLong, String firstname, String lastname, String nationalCode, String password, String email, List<StudentTakenCourse> studentTakenCourseList, Integer totalCredit, Double gpa, StudentState studentState) {
         super(aLong, firstname, lastname, nationalCode, password, email);
-        this.studentDepartment = studentDepartment;
         this.studentTakenCourseList = studentTakenCourseList;
         this.totalCredit = totalCredit;
         this.gpa = gpa;
         this.studentState = studentState;
     }
 
-    public Student(String firstname, String lastname, String nationalCode, String password, String email, Department studentDepartment, List<StudentTakenCourse> studentTakenCourseList, Integer totalCredit, Double gpa, StudentState studentState) {
+    public Student(String firstname, String lastname, String nationalCode, String password, String email, List<StudentTakenCourse> studentTakenCourseList, Integer totalCredit, Double gpa, StudentState studentState) {
         super(firstname, lastname, nationalCode, password, email);
-        this.studentDepartment = studentDepartment;
         this.studentTakenCourseList = studentTakenCourseList;
         this.totalCredit = totalCredit;
         this.gpa = gpa;
         this.studentState = studentState;
-    }
-
-    public Department getStudentDepartment() {
-        return studentDepartment;
-    }
-
-    public void setStudentDepartment(Department studentDepartment) {
-        this.studentDepartment = studentDepartment;
     }
 
     public List<StudentTakenCourse> getStudentTakenCourseList() {
@@ -108,8 +97,7 @@ public class Student extends Person {
     @Override
     public String toString() {
         return "Student{" +
-                "studentDepartment=" + studentDepartment +
-                ", studentTakenCourseList=" + studentTakenCourseList +
+//                ", studentTakenCourseList=" + studentTakenCourseList +
                 ", totalCredit=" + totalCredit +
                 ", gpa=" + gpa +
                 ", studentState=" + studentState +
