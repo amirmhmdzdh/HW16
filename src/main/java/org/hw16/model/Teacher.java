@@ -1,60 +1,77 @@
 package org.hw16.model;
 
 import jakarta.persistence.*;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.hw16.model.enums.TeacherLevel;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Entity
 @DiscriminatorValue("Teacher")
 public class Teacher extends Person {
 
+    @Min(value = 0, message = "Invalid input for unit. It should be positive number.")
     @Column(name = "total_credit")
     private Integer totalCredit;
 
+    @Min(value = 0, message = "Invalid input for salary. It should be positive number.")
     @Column(name = "base_salary")
     private Long baseSalary;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "teacher_level")
+    @NotEmpty(message = "Please Enter your major correctly.")
     private TeacherLevel teacherLevel;
 
-    @Column(name = "total_salary")
-    private Long totalSalary;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "teacher_department_id")
-    private Department teacherDepartment;
-
     @OneToMany(mappedBy = "teacher",
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     private List<ReleasedCourse> releasedCourses;
 
     public Teacher() {
     }
 
+    public Teacher(Long aLong, String firstname, String lastname, String nationalCode, String password, String email, Long baseSalary) {
+        super(aLong, firstname, lastname, nationalCode, password, email);
+        this.baseSalary = baseSalary;
+
+    }
+
     public Teacher(Integer totalCredit,
                    Long baseSalary,
                    TeacherLevel teacherLevel,
-                   Long totalSalary,
-                   Department teacherDepartment,
                    List<ReleasedCourse> releasedCourses) {
         this.totalCredit = totalCredit;
         this.baseSalary = baseSalary;
         this.teacherLevel = teacherLevel;
-        this.totalSalary = totalSalary;
-        this.teacherDepartment = teacherDepartment;
         this.releasedCourses = releasedCourses;
     }
 
-    public void setTotalCredit() {
-        for (ReleasedCourse taughtCourse : releasedCourses) {
-            this.totalCredit += taughtCourse.getCourse().getCredit();
-        }
+    public Teacher(String firstname, String lastname, String nationalCode, String password, String email, long baseSalary) {
+        super(firstname, lastname, nationalCode, password, email);
+        this.baseSalary = baseSalary;
+
+    }
+
+    public void setTotalCredit(int credit) {
+//        this.totalCredit = 0;
+//        for (ReleasedCourse taughtCourse : releasedCourses) {
+//            this.totalCredit += taughtCourse.getCourse().getCredit();
+//        }
+        this.totalCredit = credit;
     }
 
     public Integer getTotalCredit() {
+
+        for (ReleasedCourse taughtCourse : releasedCourses) {
+            totalCredit += taughtCourse.getCourse().getCredit();
+        }
+
         return totalCredit;
+    }
+
+    public void setTeacherLevel(TeacherLevel teacherLevel) {
+        this.teacherLevel = teacherLevel;
     }
 
     public void setBaseSalary(Long baseSalary) {
@@ -68,28 +85,8 @@ public class Teacher extends Person {
         return baseSalary;
     }
 
-    public void setTotalSalary() {
-        this.totalSalary = this.baseSalary + this.totalCredit * 1_000_000L;
-    }
-
-    public Long getTotalSalary() {
-        return totalSalary;
-    }
-
     public TeacherLevel getTeacherLevel() {
         return teacherLevel;
-    }
-
-    public void setTeacherLevel(TeacherLevel teacherLevel) {
-        this.teacherLevel = teacherLevel;
-    }
-
-    public Department getTeacherDepartment() {
-        return teacherDepartment;
-    }
-
-    public void setTeacherDepartment(Department teacherDepartment) {
-        this.teacherDepartment = teacherDepartment;
     }
 
     public List<ReleasedCourse> getReleasedCourses() {
@@ -106,9 +103,7 @@ public class Teacher extends Person {
                 "totalCredit=" + totalCredit +
                 ", baseSalary=" + baseSalary +
                 ", teacherLevel=" + teacherLevel +
-                ", totalSalary=" + totalSalary +
-                ", teacherDepartment=" + teacherDepartment +
-                ", releasedCourses=" + releasedCourses +
+//                ", releasedCourses=" + releasedCourses +
                 "} " + super.toString();
     }
 }
