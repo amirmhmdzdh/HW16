@@ -288,8 +288,23 @@ public class EmployeeMenu {
                 scanner.close();
                 return;
             }
+            scanner.nextLine();
 
-            Teacher updatedTeacher = new Teacher(id, newFirstName, lastName, newNationalCode, newPassword, email, baseSalary);
+            String[] level = new String[2];
+            for (int i = 0; i < 2; i++) {
+                level[i] = TeacherLevel.values()[i].toString();
+            }
+            System.out.println(Arrays.toString(level));
+            System.out.println("Choose a Level:");
+            TeacherLevel teacherLevel = null;
+            try {
+                teacherLevel = TeacherLevel.values()[scanner.nextInt() - 1];
+            } catch (Exception e) {
+                System.out.println("Invalid input for teacher level. Please enter a valid number.");
+            }
+            scanner.nextLine();
+
+            Teacher updatedTeacher = new Teacher(id, newFirstName, lastName, newNationalCode, newPassword, email, baseSalary, teacherLevel);
             teacherService.saveOrUpdate(updatedTeacher);
 
             if (updatedTeacher != null) {
@@ -363,10 +378,11 @@ public class EmployeeMenu {
             System.out.println("Enter email: ");
             String email = scanner.nextLine();
 
-            Student newStudent = studentService.signUp(firstname, lastname, nationalCode, password, email);
-            if (newStudent != null) {
+            Student newStudent = new Student(firstname, lastname, nationalCode, password, email);
+            Student student1 = studentService.saveOrUpdate(newStudent);
+            if (student1 != null) {
                 System.out.println("The Student has been signed up:");
-                System.out.println(newStudent);
+                System.out.println(student1);
             } else {
                 System.out.println("An error occurred while signing up the student.");
             }
@@ -384,7 +400,7 @@ public class EmployeeMenu {
             if (optionalStudent.isPresent()) {
                 Student studentToUpdate = optionalStudent.get();
 
-                System.out.println("Enter new Firstname: ");
+                System.out.println("Enter new Firstname : ");
                 String newFirstname = scanner.nextLine();
 
                 System.out.println("Enter Lastname: ");
@@ -438,6 +454,7 @@ public class EmployeeMenu {
             System.out.println("An error occurred: " + e.getMessage());
         }
     }
+//======================================================================================================================
 
     private static void courseOptions() {
         courseService.showAll().forEach(System.out::println);
@@ -468,7 +485,6 @@ public class EmployeeMenu {
     }
 
     private static void saveNewCourse() {
-        Teacher teacher = null;
         System.out.println("Enter the Course title: ");
         String title = scanner.nextLine();
 
@@ -476,7 +492,6 @@ public class EmployeeMenu {
         int credit = 0;
         try {
             credit = Integer.parseInt(scanner.nextLine());
-            //    teacher.setTotalCredit(credit);
             if (credit <= 0) {
                 System.out.println("Invalid credit value. Please enter a positive number.");
                 return;
@@ -570,6 +585,13 @@ public class EmployeeMenu {
         newReleasedCourse.setSemester(semester);
 
         releasedCourseService.saveOrUpdate(newReleasedCourse);
+
+        Teacher selectedTeacher = teacherList.get(selectedTeacherIndex - 1);
+        Course selectedCourse = courseList.get(selectedCourseIndex - 1);
+        int credits = selectedCourse.getCredit();
+        selectedTeacher.setTotalCredit(credits);
+        teacherService.saveOrUpdate(selectedTeacher);
+
 
     }
 
