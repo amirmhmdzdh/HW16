@@ -6,5 +6,4 @@ import org.hw16.model.ReleasedCourse;
 import java.util.List;
 
 public interface ReleasedCourseRepository extends BaseRepository<ReleasedCourse, Long> {
-    List<ReleasedCourse> findEligibleReleasedCoursesForStudent(Long studentId);
 }
