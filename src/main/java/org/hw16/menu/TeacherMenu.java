@@ -97,6 +97,7 @@ public class TeacherMenu {
                         studentTakenCourse.setCourseState(CourseState.FAILED);
                     studentTakenCourseService.saveOrUpdate(studentTakenCourse);
                     System.out.println("Grade Saved...");
+                    student.setGpa(student);
                 } else {
                     System.out.println("ReleasedCourse not found.");
                 }
