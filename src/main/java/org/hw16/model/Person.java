@@ -32,6 +32,7 @@ public class Person extends BaseEntity<Long> {
 
     @Pattern(regexp = "^\\d{10}$", message = "nationalCod must consist of numbers only")
     @NotEmpty(message = "Please Enter your NationalCode.")
+    @Column(unique = true)
     private String nationalCode;
 
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Password must consist of letters and numbers only")
@@ -40,6 +41,7 @@ public class Person extends BaseEntity<Long> {
 
     @Email(message = "Email should be valid")
     @NotEmpty(message = "Please Enter your Email.")
+    @Column(unique = true)
     private String email;
 
 
