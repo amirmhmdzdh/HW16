@@ -38,6 +38,8 @@ public class EmployeeServiceImpel
     @Override
     public Employee signUp(Employee employee) {
         Transaction transaction = null;
+        if (!isValid(employee))
+            return null;
         try (Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
 

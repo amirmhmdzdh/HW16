@@ -31,6 +31,8 @@ public class StudentServiceImpl
     @Override
     public Student signUp(Student student) {
         Transaction transaction = null;
+        if (!isValid(student))
+            return null;
         try (Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
             Student saveOrUpdate = repository.saveOrUpdate(student);

@@ -36,6 +36,8 @@ public class TeacherServiceImpel
     @Override
     public Teacher signUp(Teacher teacher) {
         Transaction transaction = null;
+        if (!isValid(teacher))
+            return null;
         try (Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
             Teacher saveOrUpdate = repository.saveOrUpdate(teacher);
