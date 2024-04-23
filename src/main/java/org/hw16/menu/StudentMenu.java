@@ -25,7 +25,7 @@ public class StudentMenu {
 
             System.out.println("***** Student Menu ***** ");
             System.out.println("1. SignIn AND show Profile ");
-            System.out.println("2. Show Cource AND SELECT unite ");
+            System.out.println("2. Show Course AND SELECT unite ");
             System.out.println("3. Get a report ");
             System.out.println("4. EXIT ");
             System.out.println();
@@ -35,6 +35,9 @@ public class StudentMenu {
             switch (input) {
                 case "1" -> studentSignIn();
                 case "2" -> showTakenCourse();
+                case "3" -> {
+                    return;
+                }
                 case "4" -> loop = false;
                 default -> System.out.println("This choice does not exist.");
             }
@@ -55,7 +58,7 @@ public class StudentMenu {
 
         if (student != null) {
             System.out.println("Login successful!");
-            System.out.println("Your profile is: \n" + student.toString());
+            System.out.println("Your profile is: \n" + student);
         } else {
             System.out.println("Login failed. Invalid username or password.");
         }
@@ -65,7 +68,7 @@ public class StudentMenu {
         Set<ReleasedCourse> selectedCourses = new HashSet<>();
 
         if (student.getGpa() >= 18) {
-            int totalCredit = 0;
+            int totalCredits = 0;
             int maxCourses = 24;
             int selectedCoursesCount = 0;
 
@@ -92,7 +95,7 @@ public class StudentMenu {
                         System.out.println("This course has already been selected. Please choose another course.");
                         continue;
                     }
-                    totalCredit += chosenItem.getCourse().getCredit();
+                    totalCredits += chosenItem.getCourse().getCredit();
                     studentTakenCourses.add(studentTakenCourseService.addCourseByGpa(student, chosenItem));
                     System.out.println("Chosen item: " + chosenItem);
                     selectedCoursesCount += chosenItem.getCourse().getCredit();
@@ -102,7 +105,7 @@ public class StudentMenu {
                 }
             }
         } else if (student.getGpa() < 18) {
-            int totalCredit = 0;
+            int totalCredits = 0;
             int maxCourses = 20;
             int selectedCoursesCount = 0;
 
@@ -129,7 +132,7 @@ public class StudentMenu {
                         System.out.println("This course has already been selected. Please choose another course.");
                         continue;
                     }
-                    totalCredit += chosenItem.getCourse().getCredit();
+                    totalCredits += chosenItem.getCourse().getCredit();
                     studentTakenCourses.add(studentTakenCourseService.addCourseByGpa(student, chosenItem));
                     System.out.println("Chosen item: " + chosenItem);
                     selectedCoursesCount += chosenItem.getCourse().getCredit();
@@ -140,11 +143,9 @@ public class StudentMenu {
             }
         }
     }
-
     private static void showTakenCourse() {
 
         studentTakenCourseService.showAll();
 
     }
-
 }
