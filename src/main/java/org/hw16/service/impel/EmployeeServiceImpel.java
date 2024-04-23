@@ -35,27 +35,17 @@ public class EmployeeServiceImpel
         }
     }
 
-    public Employee signUp(String firstname, String lastname, String nationalCode, String password, String email, Long salary) {
+    @Override
+    public Employee signUp(Employee employee) {
         Transaction transaction = null;
         try (Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
 
-            if (repository.findByNationalCodeAndPassword(nationalCode, password) != null ||
-                    repository.findByFirstnameAndLastname(firstname, lastname) != null ||
-                    repository.findByEmail(email) != null) {
-                throw new SignInException("User with the same username, name, or email already exists");
-            }
-
-            Employee newEmployee = new Employee();
-            newEmployee.setFirstName(firstname);
-            newEmployee.setLastName(lastname);
-            newEmployee.setNationalCode(nationalCode);
-            newEmployee.setPassword(password);
-            newEmployee.setEmail(email);
-            newEmployee.setSalary(salary);
+            Employee saveOrUpdate = repository.saveOrUpdate(employee);
 
             transaction.commit();
-            return saveOrUpdate(newEmployee);
+            session.close();
+            return saveOrUpdate;
         } catch (HibernateException e) {
             if (transaction != null) {
                 transaction.rollback();
