@@ -22,13 +22,13 @@ public class StudentTakenCourseRepositoryImpel extends BaseRepositoryImpel<Stude
     public StudentTakenCourse addCourseByGpa(Student student, ReleasedCourse releasedCourse) {
         Session session = sessionFactory.getCurrentSession();
 
-        int totalCredits = student.getTotalCredit();
+        student.getTotalCredit();
 
         StudentTakenCourse newTakenCourse = new StudentTakenCourse();
         newTakenCourse.setReleasedCourse(releasedCourse);
         newTakenCourse.setStudent(student);
         student.getStudentTakenCourseList().add(newTakenCourse);
-        student.setTotalCredit(totalCredits + releasedCourse.getCourse().getCredit());
+        student.setTotalCredit();
 
         session.merge(student);
         session.persist(newTakenCourse);
