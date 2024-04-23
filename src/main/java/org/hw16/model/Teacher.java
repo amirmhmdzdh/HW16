@@ -1,7 +1,6 @@
 package org.hw16.model;
 
 import jakarta.persistence.*;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.hw16.model.enums.TeacherLevel;
 
 import javax.validation.constraints.Min;
@@ -21,7 +20,6 @@ public class Teacher extends Person {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "teacher_level")
-    @NotEmpty(message = "Please Enter your major correctly.")
     private TeacherLevel teacherLevel;
 
     @OneToMany(mappedBy = "teacher",
@@ -31,27 +29,17 @@ public class Teacher extends Person {
     public Teacher() {
     }
 
-    public Teacher(Long aLong, String firstname, String lastname, String nationalCode, String password, String email, Long baseSalary) {
+    public Teacher(Long aLong, String firstname, String lastname, String nationalCode, String password, String email, Long baseSalary, TeacherLevel teacherLevel) {
         super(aLong, firstname, lastname, nationalCode, password, email);
         this.baseSalary = baseSalary;
-
-    }
-
-    public Teacher(Integer totalCredit,
-                   Long baseSalary,
-                   TeacherLevel teacherLevel,
-                   List<ReleasedCourse> releasedCourses) {
-        this.totalCredit = totalCredit;
-        this.baseSalary = baseSalary;
         this.teacherLevel = teacherLevel;
-        this.releasedCourses = releasedCourses;
     }
-
-    public Teacher(String firstname, String lastname, String nationalCode, String password, String email, long baseSalary) {
+    public Teacher(String firstname, String lastname, String nationalCode, String password, String email, long baseSalary, TeacherLevel teacherLevel) {
         super(firstname, lastname, nationalCode, password, email);
         this.baseSalary = baseSalary;
-
+        this.teacherLevel = teacherLevel;
     }
+
 
     public void setTotalCredit(int credit) {
 //        this.totalCredit = 0;
