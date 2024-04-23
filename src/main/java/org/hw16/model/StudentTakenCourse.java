@@ -47,12 +47,18 @@ public class StudentTakenCourse extends BaseEntity<Long> {
         this.student = student;
     }
 
-    private void setCourseState() {
-        if (this.mark < 10) {
-            this.courseState = CourseState.FAILED;
-        } else
-            this.courseState = CourseState.PASSED;
+    public StudentTakenCourse(Long aLong, ReleasedCourse releasedCourse, double mark, Student student, CourseState courseState) {
+        super(aLong);
+        this.releasedCourse = releasedCourse;
+        this.mark = mark;
+        this.student = student;
+        this.courseState = courseState;
     }
 
-
+    public Double getMark() {
+        if (mark == null) {
+            return 0.0;
+        }
+        return mark;
+    }
 }

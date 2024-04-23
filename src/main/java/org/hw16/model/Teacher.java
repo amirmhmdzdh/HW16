@@ -23,7 +23,7 @@ public class Teacher extends Person {
     private TeacherLevel teacherLevel;
 
     @OneToMany(mappedBy = "teacher",
-            fetch = FetchType.EAGER)
+            fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<ReleasedCourse> releasedCourses;
 
     public Teacher() {
@@ -34,6 +34,7 @@ public class Teacher extends Person {
         this.baseSalary = baseSalary;
         this.teacherLevel = teacherLevel;
     }
+
     public Teacher(String firstname, String lastname, String nationalCode, String password, String email, long baseSalary, TeacherLevel teacherLevel) {
         super(firstname, lastname, nationalCode, password, email);
         this.baseSalary = baseSalary;
@@ -50,6 +51,7 @@ public class Teacher extends Person {
     }
 
     public Integer getTotalCredit() {
+        int totalCredit = 0;
 
         for (ReleasedCourse taughtCourse : releasedCourses) {
             totalCredit += taughtCourse.getCourse().getCredit();
@@ -57,6 +59,7 @@ public class Teacher extends Person {
 
         return totalCredit;
     }
+
 
     public void setTeacherLevel(TeacherLevel teacherLevel) {
         this.teacherLevel = teacherLevel;

@@ -128,7 +128,7 @@ public class StudentMenu {
                 if (selectedIndex >= 0 && selectedIndex < releasedCourseList.size()) {
                     ReleasedCourse chosenItem = releasedCourseList.get(selectedIndex);
 
-                    if (selectedCourses.contains(chosenItem)) {
+                    if (studentTakenCourses.contains(chosenItem)) {
                         System.out.println("This course has already been selected. Please choose another course.");
                         continue;
                     }
@@ -144,8 +144,15 @@ public class StudentMenu {
         }
     }
     private static void showTakenCourse() {
+        List<StudentTakenCourse> takenCourses = studentTakenCourseService.showAll();
 
-        studentTakenCourseService.showAll();
-
+        if (takenCourses.isEmpty()) {
+            System.out.println("No taken courses found.");
+        } else {
+            System.out.println("Taken courses:");
+            for (StudentTakenCourse takenCourse : takenCourses) {
+                System.out.println(takenCourse);
+            }
+        }
     }
 }

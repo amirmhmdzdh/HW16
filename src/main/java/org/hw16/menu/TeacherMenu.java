@@ -59,7 +59,6 @@ public class TeacherMenu {
             System.out.println("Login successful!");
             System.out.println("Your profile is:");
             System.out.printf("FirstName : %s, LastName : %s, NationalCode: %s , Teacher Level: %s", teacher.getFirstName(), teacher.getLastName(), teacher.getNationalCode(), teacher.getTeacherLevel());
-
             if (teacher.getTeacherLevel() == TeacherLevel.TENURED) {
                 long totalSalary = teacher.getBaseSalary() + teacher.getTotalCredit() * 1_000_000L;
                 System.out.println(" Pay slip " + totalSalary);
@@ -73,13 +72,12 @@ public class TeacherMenu {
 
     private static void recordStudentsGrades() {
         try {
-            System.out.println("Please Enter Student Grade:\n");
+            System.out.println("Please Enter line:\n");
+           long radif = scanner.nextLong();
             System.out.println("Enter Mark:");
             double mark = scanner.nextDouble();
-
-
             System.out.println("Enter Course ID:");
-            long courseId = scanner.nextInt();
+            long courseId = scanner.nextLong();
             scanner.nextLine();
             System.out.println("Enter Student ID:");
             long studentId = scanner.nextLong();
@@ -90,14 +88,17 @@ public class TeacherMenu {
                 Optional<ReleasedCourse> optionalCourse = releasedCourseService.findById(courseId);
                 if (optionalCourse.isPresent()) {
                     ReleasedCourse releasedCourse = optionalCourse.get();
-                    StudentTakenCourse studentTakenCourse = new StudentTakenCourse(releasedCourse, mark, student);
+                    CourseState courseState;
                     if (mark >= 10) {
-                        studentTakenCourse.setCourseState(CourseState.PASSED);
-                    } else
-                        studentTakenCourse.setCourseState(CourseState.FAILED);
+                        courseState = CourseState.PASSED;
+                    } else {
+                        courseState = CourseState.FAILED;
+                    }
+                    StudentTakenCourse studentTakenCourse = new StudentTakenCourse(radif,releasedCourse, mark, student,courseState);
                     studentTakenCourseService.saveOrUpdate(studentTakenCourse);
                     System.out.println("Grade Saved...");
-                    student.setGpa(student);
+                    student.setGpa(student,releasedCourse);
+
                 } else {
                     System.out.println("ReleasedCourse not found.");
                 }

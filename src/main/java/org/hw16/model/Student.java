@@ -12,7 +12,7 @@ import java.util.List;
 public class Student extends Person {
 
     @OneToMany(mappedBy = "student",
-            fetch = FetchType.EAGER)
+            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<StudentTakenCourse> studentTakenCourseList;
 
     @Column(name = "total_credits")
@@ -73,12 +73,12 @@ public class Student extends Person {
         return totalCredit = 0;
     }
 
-    public void setGpa(Student student) {
+    public void setGpa(Student student, ReleasedCourse releasedCourse) {
         int totalCredits = 0;
         double weightedSum = 0.0;
 
         for (StudentTakenCourse takenCourse : student.getStudentTakenCourseList()) {
-            if (takenCourse.getStudent().getId() == student.getId()) { // فیلتر کردن دروس بر اساس آیدی دانش‌آموز
+            if (takenCourse.getReleasedCourse().getId() == releasedCourse.getId()) {
                 int credit = takenCourse.getReleasedCourse().getCourse().getCredit();
                 double mark = takenCourse.getMark();
 
@@ -90,7 +90,7 @@ public class Student extends Person {
         if (totalCredits != 0) {
             this.gpa = weightedSum / totalCredits;
         } else {
-            this.gpa = 0.0; // یا می‌توانید با کمک اطلاعات موجود، مقدار پیش‌فرض معدل را مشخص کنید
+            this.gpa = 0.0;
         }
     }
 

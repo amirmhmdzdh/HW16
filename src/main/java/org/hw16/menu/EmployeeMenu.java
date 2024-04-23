@@ -444,7 +444,8 @@ public class EmployeeMenu {
             System.out.println("2. UPDATE Existing Course");
             System.out.println("3. DELETE Existing Course");
             System.out.println("4. New Released Course");
-            System.out.println("5. EXIT");
+            System.out.println("5. Create new Semester");
+            System.out.println("6. EXIT");
 
 
             String input = scanner.nextLine();
@@ -453,7 +454,8 @@ public class EmployeeMenu {
                 case "2" -> updateExistingCourse();
                 case "3" -> deleteExistingCourse();
                 case "4" -> saveNewReleasedCourse();
-                case "5" -> loop = false;
+                case "5" -> createSemester();
+                case "6" -> loop = false;
                 default -> System.out.println("This choice does not exist.");
             }
         }
@@ -530,13 +532,17 @@ public class EmployeeMenu {
     }
 
     private static void saveNewReleasedCourse() {
-        Semester semester = createSemester();
         List<Teacher> teacherList = teacherService.showAll().stream().toList();
         List<Course> courseList = courseService.showAll().stream().toList();
+        List<Semester> semestersList = semesterService.showAll().stream().toList();
 
-        System.out.println("Enter Half an academic year ");
-        int anInt = scanner.nextInt();
-        semester.setSeason(anInt);
+
+        System.out.println("Available Semester:");
+        for (int i = 0; i < semestersList.size(); i++) {
+            System.out.println((i + 1) + ". " + semestersList.get(i));
+        }
+        System.out.print("Select a semester (enter the number): ");
+        int selectedSemesterIndex = scanner.nextInt();
         scanner.nextLine();
         System.out.println("Available Teachers:");
         for (int i = 0; i < teacherList.size(); i++) {
@@ -557,8 +563,7 @@ public class EmployeeMenu {
 
         newReleasedCourse.setTeacher(teacherList.get(selectedTeacherIndex - 1));
         newReleasedCourse.setCourse(courseList.get(selectedCourseIndex - 1));
-        newReleasedCourse.setSemester(semester);
-
+        newReleasedCourse.setSemester(semestersList.get(selectedSemesterIndex - 1));
         releasedCourseService.saveOrUpdate(newReleasedCourse);
 
         Teacher selectedTeacher = teacherList.get(selectedTeacherIndex - 1);
