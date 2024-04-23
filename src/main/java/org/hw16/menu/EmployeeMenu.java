@@ -75,9 +75,9 @@ public class EmployeeMenu {
 
     private static void employeeSignUp() {
         System.out.println("Enter Firstname: ");
-        String firstname = scanner.nextLine();
+        String firstName = scanner.nextLine();
         System.out.println("Enter Lastname: ");
-        String lastname = scanner.nextLine();
+        String lastName = scanner.nextLine();
         System.out.println("Enter NationalCode: ");
         String nationalCode = scanner.nextLine();
         System.out.println("Enter Password: ");
@@ -86,14 +86,13 @@ public class EmployeeMenu {
         String email = scanner.nextLine();
         System.out.println("Enter the Base Salary: ");
         long baseSalary = getLongNum();
-
-        Employee newEmployee = employeeService.signUp(firstname, lastname, nationalCode, password, email, baseSalary);
+        Employee employee = new Employee(firstName, lastName, nationalCode, password, email, baseSalary);
+        Employee newEmployee = employeeService.signUp(employee);
         if (newEmployee != null) {
             System.out.println("The Employee has been signed up:");
             System.out.println(newEmployee);
         } else
             return;
-
     }
 
     private static Long getLongNum() {
@@ -101,11 +100,10 @@ public class EmployeeMenu {
         try {
             num = scanner.nextLong();
         } catch (InputMismatchException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return num;
     }
-
 
     private static void employeeSignIn() {
         System.out.println("Welcome to the User Login Menu");
@@ -125,21 +123,17 @@ public class EmployeeMenu {
         } else {
             System.out.println("Login failed. Invalid username or password.");
         }
-
     }
 
     private static void employeeUpdate() {
-
         System.out.println("Enter Employee id to update:");
         long id = scanner.nextLong();
         scanner.nextLine();
         Optional<Employee> optionalEmployee = employeeService.findById(id);
         if (optionalEmployee.isPresent()) {
             Employee employee = optionalEmployee.get();
-
             System.out.println("Enter new Firstname: ");
             String newfirstname = scanner.nextLine();
-
             System.out.println("Enter Lastname: ");
             String lastname = scanner.nextLine();
             System.out.println("Enter NationalCode: ");
@@ -149,19 +143,9 @@ public class EmployeeMenu {
             System.out.println("Enter email: ");
             String email = scanner.nextLine();
             System.out.println("Enter the Base Salary: ");
-
-            long baseSalary = 0L;
-            try {
-                baseSalary = scanner.nextLong();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input for base salary.");
-                scanner.close();
-                return;
-            }
-
+            long baseSalary = getLongNum();
             Employee updatedEmployee = new Employee(id, newfirstname, lastname, nationalCode, password, email, baseSalary);
             employeeService.saveOrUpdate(updatedEmployee);
-
             if (updatedEmployee != null) {
                 System.out.println("The Employee has been updated:");
                 System.out.println(updatedEmployee);
@@ -193,8 +177,6 @@ public class EmployeeMenu {
             System.out.println("An error occurred: " + e.getMessage());
         }
     }
-
-
 //-==============================================================================================-------------------
 
     private static void teacherOptions() {
@@ -232,13 +214,7 @@ public class EmployeeMenu {
         System.out.println("Enter Email: ");
         String email = scanner.nextLine();
         System.out.println("Enter the Base Salary: ");
-        long baseSalary = 0;
-        try {
-            baseSalary = scanner.nextLong();
-        } catch (Exception e) {
-            System.out.println("Invalid input for base salary. Please enter a valid number.");
-        }
-        scanner.nextLine();
+        long baseSalary = getLongNum();
 
         String[] level = new String[2];
         for (int i = 0; i < 2; i++) {
@@ -253,8 +229,8 @@ public class EmployeeMenu {
             System.out.println("Invalid input for teacher level. Please enter a valid number.");
         }
         scanner.nextLine();
-
-        Teacher newTeacher = teacherService.signUp(firstname, lastname, nationalCode, password, email, baseSalary, teacherLevel);
+        Teacher teacher = new Teacher(firstname, lastname, nationalCode, password, email, baseSalary, teacherLevel);
+        Teacher newTeacher = teacherService.signUp(teacher);
         System.out.println("The Teacher has been signed up: ");
         System.out.println(newTeacher);
     }
@@ -364,7 +340,6 @@ public class EmployeeMenu {
         }
     }
 
-
     private static void studentSignUp() {
         try {
             System.out.println("Enter Firstname: ");
@@ -379,10 +354,10 @@ public class EmployeeMenu {
             String email = scanner.nextLine();
 
             Student newStudent = new Student(firstname, lastname, nationalCode, password, email);
-            Student student1 = studentService.saveOrUpdate(newStudent);
-            if (student1 != null) {
+            Student student = studentService.signUp(newStudent);
+            if (student != null) {
                 System.out.println("The Student has been signed up:");
-                System.out.println(student1);
+                System.out.println(student);
             } else {
                 System.out.println("An error occurred while signing up the student.");
             }
