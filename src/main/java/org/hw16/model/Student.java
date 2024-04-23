@@ -2,15 +2,11 @@ package org.hw16.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.hw16.model.enums.StudentState;
 
-import javax.validation.constraints.Min;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @DiscriminatorValue("Student")
 public class Student extends Person {
@@ -20,13 +16,11 @@ public class Student extends Person {
     private List<StudentTakenCourse> studentTakenCourseList;
 
     @Column(name = "total_credits")
-    @Min(value = 0, message = "Invalid input for unit. It should be positive number.")
     private Integer totalCredit;
 
     private Double gpa;
 
     @Column(name = "student_state")
-    @NotEmpty(message = "Please Enter your major correctly.")
     private StudentState studentState;
 
     public Student() {
@@ -55,6 +49,10 @@ public class Student extends Person {
         this.studentState = studentState;
     }
 
+    public Student(String firstname, String lastname, String nationalCode, String password, String email) {
+        super(firstname, lastname, nationalCode, password, email);
+    }
+
     public List<StudentTakenCourse> getStudentTakenCourseList() {
         return studentTakenCourseList;
     }
@@ -64,26 +62,40 @@ public class Student extends Person {
     }
 
     public void setTotalCredit() {
+        int totalCredits = 0;
         for (StudentTakenCourse takenCourse : studentTakenCourseList) {
-            this.totalCredit += takenCourse.getReleasedCourse().getCourse().getCredit();
+            totalCredits += takenCourse.getReleasedCourse().getCourse().getCredit();
         }
+        this.totalCredit = totalCredits;
     }
 
     public Integer getTotalCredit() {
-        return totalCredit;
+        return totalCredit = 0;
     }
 
-    public void setGpa() {
-        int number = 0;
-        for (StudentTakenCourse takenCourse : studentTakenCourseList) {
-            this.gpa += takenCourse.getMark() * takenCourse.getReleasedCourse().getCourse().getCredit();
-            number++;
+    public void setGpa(Student student) {
+        int totalCredits = 0;
+        double weightedSum = 0.0;
+
+        for (StudentTakenCourse takenCourse : student.getStudentTakenCourseList()) {
+            if (takenCourse.getStudent().getId() == student.getId()) { // فیلتر کردن دروس بر اساس آیدی دانش‌آموز
+                int credit = takenCourse.getReleasedCourse().getCourse().getCredit();
+                double mark = takenCourse.getMark();
+
+                weightedSum += mark * credit;
+                totalCredits += credit;
+            }
         }
-        this.gpa /= totalCredit;
+
+        if (totalCredits != 0) {
+            this.gpa = weightedSum / totalCredits;
+        } else {
+            this.gpa = 0.0; // یا می‌توانید با کمک اطلاعات موجود، مقدار پیش‌فرض معدل را مشخص کنید
+        }
     }
 
     public Double getGpa() {
-        return gpa;
+        return gpa = 0.0;
     }
 
     public StudentState getStudentState() {
