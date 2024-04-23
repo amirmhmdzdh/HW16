@@ -45,24 +45,4 @@ public class StudentRepositoryImpel extends BaseRepositoryImpel<Student, Long>
 
         return student;
     }
-
-    @Override
-    public Student findByFirstnameAndLastname(String firstname, String lastname) {
-        Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Student WHERE firstName = :firstname AND lastName = :lastname";
-        return session.createQuery(hql, Student.class)
-                .setParameter("firstname", firstname)
-                .setParameter("lastname", lastname)
-                .uniqueResult();
-    }
-
-    @Override
-    public Student findByEmail(String email) {
-        Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Student WHERE email = :email";
-        return session.createQuery(hql, Student.class)
-                .setParameter("email", email)
-                .uniqueResult();
-    }
-
 }

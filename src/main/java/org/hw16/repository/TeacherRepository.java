@@ -8,8 +8,4 @@ import java.util.List;
 public interface TeacherRepository extends BaseRepository<Teacher, Long> {
     Teacher findByNationalCodeAndPassword(String nationalCode, String password);
 
-    Teacher findByFirstnameAndLastname(String firstname, String lastname);
-
-    Teacher findByEmail(String email);
-
 }

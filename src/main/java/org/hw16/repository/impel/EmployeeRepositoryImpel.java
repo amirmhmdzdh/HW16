@@ -26,22 +26,4 @@ public class EmployeeRepositoryImpel extends BaseRepositoryImpel<Employee, Long>
                 .setParameter("password", password)
                 .uniqueResult();
     }
-    @Override
-    public Employee findByFirstnameAndLastname(String firstname, String lastname) {
-        Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Employee WHERE firstName = :firstname AND lastName = :lastname";
-        return session.createQuery(hql, Employee.class)
-                .setParameter("firstname", firstname)
-                .setParameter("lastname", lastname)
-                .uniqueResult();
-    }
-
-    @Override
-    public Employee findByEmail(String email) {
-        Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Employee WHERE email = :email";
-        return session.createQuery(hql, Employee.class)
-                .setParameter("email", email)
-                .uniqueResult();
-    }
 }

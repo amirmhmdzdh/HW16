@@ -31,25 +31,4 @@ public class TeacherRepositoryImpel extends BaseRepositoryImpel<Teacher, Long>
         List<Teacher> resultList = query.getResultList();
         return resultList.isEmpty() ? null : resultList.get(0);
     }
-
-    @Override
-    public Teacher findByFirstnameAndLastname(String firstname, String lastname) {
-        Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Teacher t WHERE t.firstName = :firstname AND t.lastName = :lastname";
-        Query<Teacher> query = session.createQuery(hql, Teacher.class);
-        query.setParameter("firstname", firstname);
-        query.setParameter("lastname", lastname);
-        List<Teacher> resultList = query.getResultList();
-        return resultList.isEmpty() ? null : resultList.get(0);
-    }
-
-    @Override
-    public Teacher findByEmail(String email) {
-        Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Teacher t WHERE t.email = :email";
-        Query<Teacher> query = session.createQuery(hql, Teacher.class);
-        query.setParameter("email", email);
-        List<Teacher> resultList = query.getResultList();
-        return resultList.isEmpty() ? null : resultList.get(0);
-    }
 }
